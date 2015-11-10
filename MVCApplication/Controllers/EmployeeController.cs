@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using MVCApplication.Models;
 using MVCApplication.ViewModels;
+using MVCApplication.Filters;
 
 namespace MVCApplication.Controllers
 {
@@ -18,6 +17,7 @@ namespace MVCApplication.Controllers
             return this.CustomerName + "|" + this.Address;
         }
     }
+
     public class EmployeeController : Controller
     {
         public Customer GetCustomer()
@@ -28,6 +28,7 @@ namespace MVCApplication.Controllers
             return c;
         }
 
+        [HeaderFooterFilter]
         public ActionResult Index()
         {
             EmployeeListViewModel employeeListViewModel = new EmployeeListViewModel();
@@ -57,11 +58,30 @@ namespace MVCApplication.Controllers
             return View("Index", employeeListViewModel);
         }
 
+        [AdminFilter]
+        [HeaderFooterFilter]
         public ActionResult AddNew()
         {
-            return View("CreateEmployee", new CreateEmployeeViewModel());
+            CreateEmployeeViewModel employeeListViewModel = new CreateEmployeeViewModel();
+            employeeListViewModel.UserName = User.Identity.Name;
+            return View("CreateEmployee", employeeListViewModel);
         }
 
+        public ActionResult GetAddNewLink()
+        {
+            if (Convert.ToBoolean(Session["IsAdmin"]))
+            {
+                return PartialView("AddNewLink");
+            }
+            else
+            {
+                return new EmptyResult();
+            }
+        }
+
+        [ValidateAntiForgeryToken]
+        [AdminFilter]
+        [HeaderFooterFilter]
         public ActionResult SaveEmployee(Employee e, string BtnSubmit)
         {
             switch (BtnSubmit)
@@ -86,6 +106,7 @@ namespace MVCApplication.Controllers
                         {
                             vm.Salary = ModelState["Salary"].Value.AttemptedValue;
                         }
+                        vm.UserName = User.Identity.Name;
                         return View("CreateEmployee", vm);
                     }
                 case "Cancel":

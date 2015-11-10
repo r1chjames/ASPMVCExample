@@ -1,25 +1,31 @@
 ﻿@using MVCApplication.ViewModels
 @model EmployeeListViewModel
 
-<body>
-    <div style="text-align:right"> Hello, @Model.UserName
+@{
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
 
-    <a href="/Authentication/Logout">Logout</a></div>
+@section TitleSection{
+    MyView
+}
 
-    <a href ="/Employee/AddNew">Add New</a>
-        <div>
-            <table>
-                <tr>
-                    <th>Employee Name</th>
-                    <th>Salary</th>
-                </tr>
-                @foreach (EmployeeViewModel item in Model.Employees)
+@section ContentBody{
+    <div>
+        @{
+            Html.RenderAction("GetAddNewLink");
+        }
+        <table border="1">
+            <tr>
+                <th>Employee Name</th>
+                <th>Salary</th>
+            </tr>
+            @foreach (EmployeeViewModel item in Model.Employees)
             {
-                    <tr>
-                        <td>@item.EmployeeName</td>
-                        <td style="background-color:@item.SalaryColor">@item.Salary</td>
-                    </tr>
-                }
-            </table>
-        </div>
-</body>
+                <tr>
+                    <td>@item.EmployeeName</td>
+                    <td style="background-color:@item.SalaryColor">@item.Salary</td>
+                </tr>
+            }
+        </table>
+    </div>
+}

@@ -5,8 +5,8 @@ using System.Web;
 
 namespace MVCApplication.ViewModels
 {
-    public class EmployeeListViewModel : BaseViewModel
+    public class FileUploadViewModel : BaseViewModel
     {
-        public List<EmployeeViewModel> Employees { get; set; }
+        public HttpPostedFileBase fileUpload { get; set; }
     }
 }
