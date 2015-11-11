@@ -29,11 +29,11 @@ namespace MVCApplication.Controllers
         {
             List<Employee> employees = new List<Employee>();
             StreamReader csvreader = new StreamReader(model.fileUpload.InputStream);
-            csvreader.ReadLine(); // Assuming first line is header
+            csvreader.ReadLine();
             while (!csvreader.EndOfStream)
             {
                 var line = csvreader.ReadLine();
-                var values = line.Split(',');//Values are comma separated
+                var values = line.Split(',');
                 Employee e = new Employee();
                 e.FirstName = values[0];
                 e.LastName = values[1];
