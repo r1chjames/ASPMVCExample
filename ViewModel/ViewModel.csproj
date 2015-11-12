@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseViewModel.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="CreateEmployeeViewModel.cs" />
     <Compile Include="EmployeeListViewModel.cs" />
     <Compile Include="EmployeeViewModel.cs" />
