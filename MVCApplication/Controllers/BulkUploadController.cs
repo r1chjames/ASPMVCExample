@@ -3,11 +3,13 @@ using MVCApplication.Models;
 using MVCApplication.ViewModels;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace MVCApplication.Controllers
 {
-    public class BulkUploadController : Controller
+    public class BulkUploadController : AsyncController
     {
         [HeaderFooterFilter]
         [AdminFilter]
@@ -17,9 +19,13 @@ namespace MVCApplication.Controllers
         }
 
         [AdminFilter]
-        public ActionResult Upload(FileUploadViewModel model)
+        [HandleError]
+        public async Task<ActionResult> Upload(FileUploadViewModel model)
         {
-            List<Employee> employees = GetEmployees(model);
+            int t1 = Thread.CurrentThread.ManagedThreadId;
+            List<Employee> employees = await Task.Factory.StartNew<List<Employee>>
+                (() => GetEmployees(model));
+            int t2 = Thread.CurrentThread.ManagedThreadId;
             EmployeeBusinessLayer bal = new EmployeeBusinessLayer();
             bal.UploadEmployees(employees);
             return RedirectToAction("Index", "Employee");
